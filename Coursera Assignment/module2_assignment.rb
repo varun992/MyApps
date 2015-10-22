@@ -21,13 +21,21 @@ end
 
 	def calculate_word_frequency
 	
-	@word_frequency = Hash.new(0)
-	@content.split.each do |word|
-	@word_frequency[word.downcase]+=1
+		@word_frequency = Hash.new(0)
+		@content.split.each do |word|
+		@word_frequency[word.downcase]+=1
+		end
+		@highest_wf_count=@word_frequency.max_by{ |k,v| v }[1]
+		@highest_wf_words = []
+		@word_frequency.each  do |k,v|
+			if(@word_frequency[k]==@highest_wf_count)
+				@highest_wf_words << k
+			
+		end
+		
 	end
-	@highest_wf_words=@word_frequency.max_by{ |k,v| v }[0]
-	puts @highest_wf_words
-	@highest_wf_count=@word_frequency.max_by{ |k,v| v }[1]
+	
+	
 	
 end
   #Implement the initialize() method to:
@@ -58,10 +66,11 @@ class Solution
   #* print_highest_word_frequency_across_lines() - prints the values of LineAnalyzer objects in 
   #  highest_count_words_across_lines in the specified format
 	def analyze_file()
-	#	@analyzers= []
+		@analyzers= []
 		File.foreach('test.txt') do |line|
-		
+		#p $.
 		@analyzers << LineAnalyzer.new(line,$.)
+		#puts "  #{@analyzers[$.-1].highest_wf_words}  "
 		end
 		
 	end
@@ -76,7 +85,7 @@ class Solution
 	@check_count = @analyzers.max_by{|e| e.highest_wf_count}
 	@check = @analyzers.find_all{|e| e.highest_wf_count==@check_count.highest_wf_count}
 	 @highest_count_across_lines = @check_count.highest_wf_count
-	@check.each {|item| @highest_count_words_across_lines << item.highest_wf_words}
+	@check.each {|item| item.highest_wf_words.each{|word| @highest_count_words_across_lines << word}}
 	
 	end
 	
